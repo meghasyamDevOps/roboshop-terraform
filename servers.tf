@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
 resource "aws_instance" "instance" {
   for_each               = var.components
   ami                    = data.aws_ami.ami.id
