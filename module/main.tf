@@ -15,3 +15,23 @@ resource "aws_route53_record" "records" {
   ttl     = 30
   records = [aws_instance.instance.private_ip]
 }
+
+resource "null_resource" "resource" {
+
+  depends_on = [aws_instance.instance, aws_route53_record.records]
+
+  provisioner "remote-exec" {
+    connection {
+      type     = "ssh"
+      user     = "ec2-user"
+      password = "DevOps321"
+      host     = aws_instance.instance.private_ip
+    }
+    inline = [
+      "rm -rf Roboshop-shell",
+      "git clone https://github.com/meghasyamDevOps/Roboshop-shell.git",
+      "cd Roboshop-shell",
+      "sudo bash ${var.name}.sh ${var.password}"
+    ]
+  }
+}
